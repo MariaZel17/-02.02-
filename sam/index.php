@@ -1,65 +1,63 @@
 <?php
 	require_once "session.php";
-	if($_SESSION["login"] != "") {
-		header("Location: /");
-	}
-	
 	require_once "mysqli.php";
-		
-	if(!empty($_POST)) {
+
+	//проверка пользователя
+	if(!empty($_POST))
 		if( !db_connect() ) {
 			
-			$fio = htmlentities(mysqli_real_escape_string($conn, $_POST["fio"]));
-			$user = htmlentities(mysqli_real_escape_string($conn, $_POST["login"]));
-			$password = htmlentities(mysqli_real_escape_string($conn, $_POST["password"]));
-			$repeatpassword = htmlentities(mysqli_real_escape_string($conn, $_POST["repeatpassword"]));
+			$usr= htmlentities(mysqli_real_escape_string($conn,$_POST["login"]));
+			$passwd = htmlentities(mysqli_real_escape_string($conn,$_POST["password"]));
 			
-			if (!empty($user)){
-				if (!db_check_usr($user)){ // <- Проверка на повторяющиеся логины
-					if (strcmp($password, $repeatpassword) === 0){
-						if(!empty($password) || !empty($repeatpassword)){
-							
-							// добавление пользлвателя
-							add_usr($fio, $user, $password);
-							$smsg = 1;
-							// указываем в заголовочном файле перенправление на главную страницу через 2 секунды
-							header("Refresh: 2; url=sign-up.php");
-							
-						} else
-							$error =  "Пароль не может быть пустым";
-							$no = 1;
-					}else
-						$error =  "Пароли не совпадают";
-						$no = 1;
+			if (!empty($usr))
+				if (!db_login($usr, $passwd)) {
 						
-				}else 
-					$error =  "Пользователь с таким именем уже существует";
-					$no = 1;
-			}else
-				$error =  "Логин не может быть пустым";
-				$no = 1;
-			
-			// закрываем соединение
-			db_close();
-			
-		} else 
-			$error = "Ошибка подключения";
-	}
-			if(isset($smsg))
-			echo <<<_OUT
-				<div id="msg-ok" class="ok">
-					<p>Вы успешно зарегистрировались</p>
-					<div class="closed" onclick="msgClose('msg-ok')">&#10006;</div>
-				</div>
+						
+						$usr1 = $usr;
+						$_SESSION["login"] = $usr; //сохраняем имя пользователя
+						//$_SESSION["status"] = get_user_status($usr); //права пользователя
+						$smsg = 1;
+						$ok = "Welcome!!";
+						header("Refresh: 2; url=menu.php");
+						echo <<<_OUT
+						<div id="msg-ok" class="ok">
+							$ok
+							<div class="closed" onclick="msgClose('msg-ok')">&#10006;</div>
+						</div>
 _OUT;
-			if(isset($no))
-			echo <<<_OUT
+				} else {
+					$error = "Не правильный логин или пароль";
+					echo <<<_OUT
 					<div id="msg-error" class="error">						
 						$error
 						<div class="closed" onclick="msgClose('msg-error')">&#10006;</div>
 					</div>
+				
+_OUT;
+				}
+			else 
+				$error = "Логин не может быть пустым";
+				echo <<<_OUT
+				<div id="msg-error" class="error">						
+					$error
+					<div class="closed" onclick="msgClose('msg-error')">&#10006;</div>
+				</div>
 			
 _OUT;
+			
+			// закрываем соединение
+			db_close();			
+		} 
+		else{ 
+			$error = "Ошибка подключения";
+			echo <<<_OUT
+				<div id="msg-error" class="error">						
+					$error
+					<div class="closed" onclick="msgClose('msg-error')">&#10006;</div>
+				</div>
+			
+_OUT;
+		}	
 ?>
 <!DOCTYPE html>
 <html>
@@ -68,11 +66,11 @@ _OUT;
 <meta charset="utf-8">
 <style>
 fieldset{
-font-size:26px;
-background-color:white;
-width: 600px;
-position:relative;
-margin: 40px auto;
+	font-size:26px;
+	background-color:white;
+	width: 900px;
+	position:relative;
+	margin: 40px auto;
 }
 input{
 	font-size:20px;
@@ -83,9 +81,9 @@ input{
 }
 fieldset img{
 	position: absolute;
-	height:200px;
-	width: 200px;
-	right: 50px;
+	height:270px;
+	width: 270px;
+	right: 100px;
 	top:20px;
 }
 .ok{
@@ -100,22 +98,22 @@ fieldset img{
 	color: white;
 	text-align:center;
 }
-.id{
-	position: absolute;
-	width: 397px;
-	height: 67px;
-
-	background: #C1D6FF;
+input{
+	position: relative;
+	width: 350px;
+	height: 50px;
+	margin: 30px;
+	background: #b1dcfc;
 	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 	border-radius: 50px;
 
 }
-</style>
+</style>	
 <script>
-	"use strict";
+"use strict";
 
-	//удаление сообщения с экрана пользователя по нажатию на крестик в сообщении
-	function msgClose(id) {
+//удаление сообщения с экрана пользователя по нажатию на крестик в сообщении
+function msgClose(id) {
 	
 	var msg = document.getElementById(id);
 	var my_parent = msg.parentElement;
@@ -123,31 +121,25 @@ fieldset img{
 	my_parent.removeChild(msg);
 	
 	
-	}
+}
 </script>
 </head>
 
-<body >	
+<body>
+	
 	<main>
-	<form action="index.php" target="_blank">
-    <button >Главная</button>
-    </form>
-		<form id="reg" method="post">
-			<fieldset>
-				<legend>Регистрация</legend>
-				
-				<input id="1" type="fio" name="fio" placeholder="Введите ФИО" required><br>
-				<input id="1" type="login" name="login" placeholder="Введите логин" required><br>
-				<input id="1" type="password" name="password" placeholder="Пароль" required><br>
-				<input id="1" type="password" name="repeatpassword" placeholder="Повторите пароль" required><br>
-				<input id="1" type="submit" value="Зарегистрироваться">
-				<img src="ava.jpg">
+		
+		<form id="sign-up" method="POST">
+		<fieldset>
+				<legend>Авторизация</legend>
+				<input type="login" name="login" placeholder="Login" required><br>
+				<input type="password" name="password" placeholder="Password" required><br>
+				<input type="submit" name="sign-up-submit" value="Вход"><br>
+				<img src="img/ava.jpg">
 			</fieldset>
 		</form>
-	
 		
 	</main>
-	
 
 </body>
 
