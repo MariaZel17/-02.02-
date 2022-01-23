@@ -75,4 +75,14 @@
 		return md5(uniqid() . time . mt_rand());
 	}
 	
+	//получаем статус пользователя
+	function get_login_status($login) {
+		global $conn;
+		$query = "SELECT status FROM login WHERE login = '$login'";
+				
+		$result = mysqli_query($conn, $query);
+		
+		return mysqli_fetch_array($result)["status"];
+	}
+	
 ?>

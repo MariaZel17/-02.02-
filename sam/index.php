@@ -15,9 +15,9 @@
 						
 						$usr1 = $usr;
 						$_SESSION["login"] = $usr; //сохраняем имя пользователя
-						//$_SESSION["status"] = get_user_status($usr); //права пользователя
+						$_SESSION["status"] = get_login_status($usr); //права пользователя								
 						$smsg = 1;
-						$ok = "Welcome!!";
+						$ok = "Welcome!!";						
 						header("Refresh: 2; url=menu.php");
 						echo <<<_OUT
 						<div id="msg-ok" class="ok">
@@ -132,8 +132,8 @@ function msgClose(id) {
 		<form id="sign-up" method="POST">
 		<fieldset>
 				<legend>Авторизация</legend>
-				<input type="login" name="login" placeholder="Login" required><br>
-				<input type="password" name="password" placeholder="Password" required><br>
+				<input type="login" name="login" placeholder="Логин" required><br>
+				<input type="password" name="password" placeholder="Пароль" required><br>
 				<input type="submit" name="sign-up-submit" value="Вход"><br>
 				<img src="img/ava.jpg">
 			</fieldset>
