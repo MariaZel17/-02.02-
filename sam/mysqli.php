@@ -29,7 +29,7 @@
 	}
 	
 	/* Регистрация пользователя */
-	function add_usr($fio, $login, $password) {
+	function add_usr($fio, $login, $password, $status) {
 		global $conn;
 		$salt = get_salt();
 		$password = hash("sha256", $password . $salt);
@@ -38,10 +38,15 @@
 		mysqli_query($conn, $query, $db);
 	}
 	
+	/* Регистрация заказчика */
+	function add_cust($type, $name, $adres, $phone) {
+		global $conn;
+		
+		$query = "INSERT INTO customer VALUES(NULL, '$type', '$name', '$adres', '$phone')";
+		mysqli_query($conn, $query, $db);
+	}
 	
-	
-
-	
+		
 	// проверка пары логин/пароль
 	function db_login($login, $password) {
 		global $conn;
@@ -70,6 +75,16 @@
 		return mysqli_num_rows($result) != 0; // смотрим на количество строк результирующего запроса
 	}
 	
+	//проверка на существование заказчика
+	function db_check_cust($name) {
+		global $conn;
+		$query = "SELECT * FROM customer WHERE name = '$name'";
+		
+		$result = mysqli_query($conn, $query);
+		
+		return mysqli_num_rows($result) != 0; // смотрим на количество строк результирующего запроса
+	}
+	
 	// уникальная соль
 	function get_salt() {
 		return md5(uniqid() . time . mt_rand());
@@ -83,6 +98,31 @@
 		$result = mysqli_query($conn, $query);
 		
 		return mysqli_fetch_array($result)["status"];
+	}
+	
+	//вывести список категорий товаров
+	function categori(){
+		global $conn;
+		$sql = "SELECT name FROM category";
+ 
+		$result = mysqli_query($conn,$sql);
+		return $result;
+	}
+	
+	//добавление товара в таблицу товара 
+	function add_product($name, $category, $price, $img, $description, $availability) {
+		global $conn;
+		
+		$query = "INSERT INTO product VALUES(NULL, '$name', '$category', $price, '$img', '$description', $availability)";
+		mysqli_query($conn, $query, $db);
+	}
+	
+	//добавление товара в таблицу товара 
+	function add_product_char($memory, $screen, $camera, $battery_capacity) {
+		global $conn;
+		
+		$query = "INSERT INTO characteristic VALUES(NULL, '$memory', '$screen', '$camera', '$battery_capacity')";
+		mysqli_query($conn, $query, $db);
 	}
 	
 ?>

@@ -9,6 +9,7 @@
 			$usr= htmlentities(mysqli_real_escape_string($conn,$_POST["login"]));
 			$passwd = htmlentities(mysqli_real_escape_string($conn,$_POST["password"]));
 			
+			
 			if (!empty($usr))
 				if (!db_login($usr, $passwd)) {
 						
@@ -35,8 +36,8 @@ _OUT;
 				
 _OUT;
 				}
-			else 
-				$error = "Логин не может быть пустым";
+			else {
+			$error = "Логин не может быть пустым";
 				echo <<<_OUT
 				<div id="msg-error" class="error">						
 					$error
@@ -44,7 +45,7 @@ _OUT;
 				</div>
 			
 _OUT;
-			
+			}
 			// закрываем соединение
 			db_close();			
 		} 
@@ -71,6 +72,7 @@ fieldset{
 	width: 900px;
 	position:relative;
 	margin: 40px auto;
+	text-align:center;
 }
 input{
 	font-size:20px;
@@ -102,11 +104,14 @@ input{
 	position: relative;
 	width: 350px;
 	height: 50px;
-	margin: 30px;
+	margin: 20px;
 	background: #b1dcfc;
 	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 	border-radius: 50px;
 
+}
+a{
+	text-decoration:none;	
 }
 </style>	
 <script>
@@ -120,7 +125,7 @@ function msgClose(id) {
 	
 	my_parent.removeChild(msg);
 	
-	
+	//<a href="reg.php">Зарегистрироваться</a><br>
 }
 </script>
 </head>
@@ -134,8 +139,8 @@ function msgClose(id) {
 				<legend>Авторизация</legend>
 				<input type="login" name="login" placeholder="Логин" required><br>
 				<input type="password" name="password" placeholder="Пароль" required><br>
+				
 				<input type="submit" name="sign-up-submit" value="Вход"><br>
-				<img src="img/ava.jpg">
 			</fieldset>
 		</form>
 		

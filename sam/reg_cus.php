@@ -8,32 +8,21 @@
 		
 	if(!empty($_POST)) {
 		if( !db_connect() ) {
+			$type = htmlentities(mysqli_real_escape_string($conn, $_POST["type"]));
+			$name = htmlentities(mysqli_real_escape_string($conn, $_POST["name"]));
+			$adres = htmlentities(mysqli_real_escape_string($conn, $_POST["adres"]));
+			$phone = htmlentities(mysqli_real_escape_string($conn, $_POST["phone"]));
 			
-			$fio = htmlentities(mysqli_real_escape_string($conn, $_POST["fio"]));
-			$user = htmlentities(mysqli_real_escape_string($conn, $_POST["login"]));
-			$password = htmlentities(mysqli_real_escape_string($conn, $_POST["password"]));
-			$repeatpassword = htmlentities(mysqli_real_escape_string($conn, $_POST["repeatpassword"]));
-			$status = htmlentities(mysqli_real_escape_string($conn, $_POST["radio"]));
 			
-			if (!empty($user)){
-				if (!db_check_usr($user)){ // <- Проверка на повторяющиеся логины
-					if (strcmp($password, $repeatpassword) === 0){
-						if(!empty($password) || !empty($repeatpassword)){
-							
+			if (!empty($name)){
+				if (!db_check_cust($name)){ // <- Проверка на повторяющиеся логины
+					
 							// добавление пользлвателя
-							add_usr($fio, $user, $password, $status);
+							add_cust($type, $name, $adres, $phone);
 							$smsg = 1;
 							// указываем в заголовочном файле перенправление на главную страницу через 2 секунды
-							//header("Refresh: 2; url=index.php");
-							
-						} else{
-							$error =  "Пароль не может быть пустым";
-						$no = 1;}
-					}else{
-						$error =  "Пароли не совпадают";
-					$no = 1;}
-						
-				}else {
+							header("Refresh: 2; url=menu.php");										
+				}else{ 
 					$error =  "Пользователь с таким именем уже существует";
 				$no = 1;}
 			}else{
@@ -53,7 +42,7 @@
 					<div class="closed" onclick="msgClose('msg-ok')">&#10006;</div>
 				</div>
 _OUT;
-			if(isset($no))
+			if($no == 1)
 			echo <<<_OUT
 					<div id="msg-error" class="error">						
 						$error
@@ -91,13 +80,13 @@ fieldset img{
 	top:20px;
 }
 .ok{
-	height:50px;
+	height:60px;
 	background-color:green;
 	color: white;
 	text-align:center;
 }
 .error{
-	height:50px;
+	height:60px;
 	background-color:red;
 	color: white;
 	text-align:center;
@@ -135,10 +124,15 @@ button{
 	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 	border-radius: 50px;
 }
-.ra2{
+select{
 	position: relative;
-	width: 30px;
-	height: 30px;
+	width: 350px;
+	height: 50px;
+	margin: 10px;
+	background: #b1dcfc;
+	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+	border-radius: 50px;
+	font-size:24px;
 }
 </style>
 <script>
@@ -159,31 +153,24 @@ button{
 
 <body >	
 	<main>
-	<?php 
-		require_once "session.php";
-			
-		$status = $_SESSION["status"];
-		if($status == null){?>
-			<button onclick="document.location='index.php'">Назад</a></button>
-		<? }
-		if($status == "admin" || $status == "user"){?>
-			<button onclick="document.location='menu.php'">Меню</a></button>
-		<?}?>
+    <button onclick="document.location='menu.php'">Меню</a></button>
     </form>
 		<form id="reg" method="post">
 			<fieldset>
-				<legend>Регистрация</legend>
-								
-				<input id="1" type="fio" name="fio" placeholder="Введите ФИО" required><br>
-				<input id="1" type="login" name="login" placeholder="Введите логин" required><br>
-				<input class="ra2" type="radio" name="radio" value="admin"  /> администратор
-				<input class="ra2" type="radio" name="radio" value="user" checked="checked" /> пользователь<br>
-				<input id="1" type="password" name="password" placeholder="Пароль" required><br>
-				<input id="1" type="password" name="repeatpassword" placeholder="Повторите пароль" required><br>
-				<input id="1" type="submit" value="Зарегистрироваться">
+				<legend>Регистрация заказчика</legend>
+				<select id="selectID" name="type">
+					<option value="Физическое лицо">Физическое лицо</option>
+					<option value="Юридическое лицо">Юридическое лицо</option>
+				</select><br>
+				
+				<input id="1" type="name" name="name" placeholder="Наименование" required><br>
+				
+				<input id="1" type="login" name="adres" placeholder="Адрес" required><br>
+				<input id="1" type="name" name="phone" maxlength=11 placeholder="Телефон" required><br>
+				<input id="1" type="submit" value="Зарегистрировать">
 			</fieldset>
 		</form>
-		
+	
 		
 	</main>
 	

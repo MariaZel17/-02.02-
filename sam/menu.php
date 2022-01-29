@@ -3,8 +3,6 @@
 
 	$status = $_SESSION["status"];
 	
-	//$lenTrash = count($_SESSION["trash"]);
-	//$trash = $lenTrash != 0 ? "Корзина - $lenTrash товар" : "Корзина";
 	//var_dump($status);
 ?>
 <!DOCTYPE html>
@@ -34,7 +32,7 @@ input{
 </style>
 
 </head>
-<body >
+<body>
 	
 		<?php 
 		require_once "session.php";
@@ -42,13 +40,16 @@ input{
 		$status = $_SESSION["status"];		
 		//var_dump($status);
 			switch($status): 
-			case "admin" : 
-			<input type="button" name="login" value="Добавление" ><br>
+			case "admin" : ?>
+			<input type="button" onclick="document.location='reg.php'" name="login" value="Добавление пользователя" ><br>
+			<input type="button" onclick="document.location='reg_cus.php'" name="login" value="Добавление заказчика" ><br>
+			<input type="button" onclick="document.location='add_product.php'" name="login" value="Добавление товара" ><br>
 			<input type="button" name="login" value="Редактирование" ><br>
 			<input type="button" name="login" value="Удаление" ><br>
-		 case "user": 
-			<input type="button" name="login" value="Товары" ><br>
-		 endswitch; ?>
+		<?php  case "user": ?>
+			<input type="button" onclick="document.location=''" name="login" value="Товары" ><br>
+			
+		<?php  endswitch; ?>
 	
 </body>
 </html>
