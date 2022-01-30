@@ -45,9 +45,8 @@ input{
 			<input type="button" onclick="document.location='reg_cus.php'" name="login" value="Добавление заказчика" ><br>
 			<input type="button" onclick="document.location='add_product.php'" name="login" value="Добавление товара" ><br>
 			<input type="button" onclick="document.location='up_del.php'" name="login" value="Удаление и изменение" ><br>
-			<input type="button" name="login" value="Удаление" ><br>
 		<?php  case "user": ?>
-			<input type="button" onclick="document.location=''" name="login" value="Товары" ><br>
+			<input type="button" onclick="document.location='tovar.php'" name="login" value="Товары" ><br>
 			
 		<?php  endswitch; ?>
 	

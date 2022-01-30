@@ -34,42 +34,14 @@
 			
 			add_product_char($memory, $screen, $camera, $battery_capacity); //добавление характеристик товара
 			
-			if (!empty($name)){
-				if (!db_check_usr($name)){ // <- Проверка на повторяющиеся логины
-					
-							// добавление пользлвателя
-							add_cust($type, $name, $adres, $phone);
-							$smsg = 1;
-							// указываем в заголовочном файле перенправление на главную страницу через 2 секунды
-							//header("Refresh: 2; url=index.php");										
-				}else{ 
-					$error =  "Пользователь с таким именем уже существует";
-				$no = 1;}
-			}else{
-				$error =  "Логин не может быть пустым";
-			$no = 1;}
-			
-			// закрываем соединение
-			db_close();
-			
-		} else 
-			$error = "Ошибка подключения";
-	}
-			if(isset($smsg))
 			echo <<<_OUT
 				<div id="msg-ok" class="ok">
 					<p>Товар добавлен</p>
 					<div class="closed" onclick="msgClose('msg-ok')">&#10006;</div>
 				</div>
 _OUT;
-			if($no == 1)
-			echo <<<_OUT
-					<div id="msg-error" class="error">						
-						$error
-						<div class="closed" onclick="msgClose('msg-error')">&#10006;</div>
-					</div>
-			
-_OUT;
+		db_close();}
+		}
 ?>
 <!DOCTYPE html>
 <html>
@@ -201,7 +173,7 @@ img{
 				<legend>Добавление товара</legend>				
 				<input id="1" type="name" name="name" placeholder="Наименование" required><br>
 				<?php
-				categori();
+				//categori();
 				//$result_select = categori();
 				
 				/*<p><select size="1">

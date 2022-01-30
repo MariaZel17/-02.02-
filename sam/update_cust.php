@@ -6,11 +6,11 @@
 	$id = $_GET['product'];
 	
 	$host = "localhost";
-	$clogin = "root";
-	$cpasswd = "";
+	$login = "root";
+	$passwd = "";
 	$db = "z_db";
 	global $conn;
-	$conn = mysqli_connect($host, $clogin, $cpassword, $db);
+	$conn = mysqli_connect($host, $login, $password, $db);
 		
 	$sel = "SELECT * FROM customer WHERE id='$id'";
 		

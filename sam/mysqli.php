@@ -78,7 +78,7 @@
 	//проверка на существование заказчика
 	function db_check_cust($name) {
 		global $conn;
-		$query = "SELECT * FROM customer WHERE name = '$name'";
+		$query = "SELECT * FROM customer WHERE name_cus = '$name'";
 		
 		$result = mysqli_query($conn, $query);
 		
@@ -102,18 +102,18 @@
 	
 	//вывести список категорий товаров
 	function categori(){
-		global $conn;
-		$query = "SELECT name_c FROM category";
+		//global $conn;
+		//$query = "SELECT name_c FROM category";
 		//var_dump($query);
-		$result_select = mysql_result($conn, $query);
-		var_dump($result_select);
+		//$result_select = mysql_result($conn, $query);
+		//var_dump($result_select);
 		//return $result;
 	}
 	
 	//добавление товара в таблицу товара 
 	function add_product($name, $category, $price, $img, $description, $availability) {
 		global $conn;
-		
+		var_dump($description);
 		$query = "INSERT INTO product VALUES(NULL, '$name_p', '$category', $price, '$img', '$description', $availability)";
 		mysqli_query($conn, $query, $db);
 	}
