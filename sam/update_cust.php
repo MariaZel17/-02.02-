@@ -1,55 +1,49 @@
 <?php
 	require_once "session.php";
-	if($_SESSION["login"] != "") {
-
-	}
 	
 	require_once "mysqli.php";
+	
+	$id = $_GET['product'];
+	
+	$host = "localhost";
+	$clogin = "root";
+	$cpasswd = "";
+	$db = "z_db";
+	global $conn;
+	$conn = mysqli_connect($host, $clogin, $cpassword, $db);
 		
-	if(!empty($_POST)) {
-		if( !db_connect() ) {
-			$type = htmlentities(mysqli_real_escape_string($conn, $_POST["type"]));
-			$name = htmlentities(mysqli_real_escape_string($conn, $_POST["name"]));
-			$adres = htmlentities(mysqli_real_escape_string($conn, $_POST["adres"]));
-			$phone = htmlentities(mysqli_real_escape_string($conn, $_POST["phone"]));
+	$sel = "SELECT * FROM customer WHERE id='$id'";
+		
+	$res = mysqli_query($conn, $sel);
+		
+	while($row = mysqli_fetch_assoc($res))
+	{
+		$type_cus = $row['type_cus'];
+		$name_cus = $row['name_cus'];
+		$adres = $row['adres'];
+		$phone = $row['phone'];
+	}	
+	
+	if(!empty($_POST))
+	{
+		$type = $_POST["type"];
+		$name = $_POST["name"];
+		$adres = $_POST["adres"];
+		$phone = $_POST["phone"];
 			
-			
-			if (!empty($name)){
-				if (!db_check_cust($name)){ // <- Проверка на повторяющиеся логины
-					
-							// добавление пользлвателя
-							add_cust($type, $name, $adres, $phone);
-							$smsg = 1;
-							// указываем в заголовочном файле перенправление на главную страницу через 2 секунды
-							header("Refresh: 2; url=menu.php");										
-				}else{ 
-					$error =  "Пользователь с таким именем уже существует";
-				$no = 1;}
-			}else{
-				$error =  "Логин не может быть пустым";
-			$no = 1;}
-			
-			// закрываем соединение
-			db_close();
-			
-		} else {
-		$error = "Ошибка подключения";}
-	}
-			if(isset($smsg))
-			echo <<<_OUT
+		$query = "UPDATE customer SET type_cus = '$type', name_cus = '$name', adres = '$adres', phone = '$phone' WHERE id='$id'";
+		$updquery = mysqli_query($conn, $query);
+		header("Refresh:2; url=up_del.php");
+		echo <<<_OUT
 				<div id="msg-ok" class="ok">
-					<p>Вы успешно зарегистрировались</p>
+					<p>Пользователь обновлён</p>
 					<div class="closed" onclick="msgClose('msg-ok')">&#10006;</div>
 				</div>
 _OUT;
-			if($no == 1)
-			echo <<<_OUT
-					<div id="msg-error" class="error">						
-						$error
-						<div class="closed" onclick="msgClose('msg-error')">&#10006;</div>
-					</div>
-			
-_OUT;
+						
+		
+	}
+	
 ?>
 <!DOCTYPE html>
 <html>
@@ -60,7 +54,7 @@ _OUT;
 fieldset{
 	font-size:26px;
 	background-color:white;
-	width: 600px;
+	width: 900px;
 	position:relative;
 	margin: 40px auto;
 	text-align:center;
@@ -68,9 +62,6 @@ fieldset{
 input{
 	font-size:20px;
 	margin: 10px;	
-}
-.ava{
-	position: absolute;
 }
 fieldset img{
 	position: absolute;
@@ -134,6 +125,24 @@ select{
 	border-radius: 50px;
 	font-size:24px;
 }
+textarea{
+	position: relative;
+	width: 550px;
+	height: 250px;
+	margin: 10px;
+	background: #b1dcfc;
+	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+	resize: none;
+	text-align:left;
+}
+.foto{
+	position: relative;
+	width: 350px;
+	height: auto;
+	margin: 10px;
+	border-radius: 0px;
+
+}
 img{
 	width: 550px;
 	position:relative;
@@ -159,28 +168,26 @@ img{
 <body >	
 	<main>
 	<img src="img/logo.jpg"></br>
-    <button onclick="document.location='menu.php'">Меню</a></button>
+    <button onclick="document.location='up_del.php'">Назад</a></button>
     </form>
 		<form id="reg" method="post">
 			<fieldset>
-				<legend>Регистрация заказчика</legend>
-				<select id="selectID" name="type">
+				<legend>Изменение информации о заказчике</legend>
+				<select id="selectID" name="type" value="<?php echo $type_cus;?>">
 					<option value="Физическое лицо">Физическое лицо</option>
 					<option value="Юридическое лицо">Юридическое лицо</option>
 				</select><br>
 				
-				<input id="1" type="name" name="name" placeholder="Наименование" required><br>
+				<input id="1" type="name" name="name" placeholder="Наименование" value="<?php echo $name_cus;?>" required><br>
 				
-				<input id="1" type="login" name="adres" placeholder="Адрес" required><br>
-				<input id="1" type="name" name="phone" maxlength=11 placeholder="Телефон" required><br>
-				<input id="1" type="submit" value="Зарегистрировать">
+				<input id="1" type="login" name="adres" placeholder="Адрес" value="<?php echo $adres;?>" required><br>
+				<input id="1" type="name" name="phone" maxlength=11 placeholder="Телефон" value="<?php echo $phone;?>" required><br>
+				<input id="1" type="submit" value="Изменить данные">
 			</fieldset>
 		</form>
 	
 		
 	</main>
-	
-
 </body>
 
 </html>

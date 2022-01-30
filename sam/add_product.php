@@ -11,7 +11,8 @@
 			$name = htmlentities(mysqli_real_escape_string($conn, $_POST["name"]));		//значения для добавления товара
 			$category = htmlentities(mysqli_real_escape_string($conn, $_POST["type"]));			
 			$price = htmlentities(mysqli_real_escape_string($conn, $_POST["price"]));
-			$description = htmlentities(mysqli_real_escape_string($conn, $_POST["opisanie"]));
+			$description = htmlentities(mysqli_real_escape_string($conn, $_POST["description"]));
+			var_dump($description);
 			$availability = htmlentities(mysqli_real_escape_string($conn, $_POST["colvo"]));
 			
 			if ( is_uploaded_file($_FILES["img"]["tmp_name"])) {
@@ -87,9 +88,6 @@ fieldset{
 input{
 	font-size:20px;
 	margin: 10px;	
-}
-.ava{
-	position: absolute;
 }
 fieldset img{
 	position: absolute;
@@ -171,6 +169,11 @@ textarea{
 	border-radius: 0px;
 
 }
+img{
+	width: 550px;
+	position:relative;
+	margin: 0px 35%;
+}
 </style>
 <script>
 	"use strict";
@@ -190,6 +193,7 @@ textarea{
 
 <body >	
 	<main>
+	<img src="img/logo.jpg"></br>
     <button onclick="document.location='menu.php'">Меню</a></button>
     </form>
 		<form id="reg" method="post">
@@ -197,6 +201,7 @@ textarea{
 				<legend>Добавление товара</legend>				
 				<input id="1" type="name" name="name" placeholder="Наименование" required><br>
 				<?php
+				categori();
 				//$result_select = categori();
 				
 				/*<p><select size="1">
@@ -210,16 +215,16 @@ textarea{
 				?>
 				
 				<select id="selectID" name="type">
-					<option value="individual">Смартфон</option>
-					<option value="entity">Планшет</option>
-					<option value="entity">Часы</option>
+					<option value="Смартфон">Смартфон</option>
+					<option value="Планшет">Планшет</option>
+					<option value="Часы">Часы</option>
 				</select><br>
    
    
    
 				
 				<input id="1" type="price" name="price" placeholder="Цена" required><br>
-				<textarea name="opisanie">
+				<textarea name="description" placeholder="Описание">
 				</textarea >
 				<input class=foto type="file" name="img" accept="image/jpeg,image/png"><br>
 				<p>Характеристики</p>

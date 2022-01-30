@@ -113,6 +113,11 @@ input{
 a{
 	text-decoration:none;	
 }
+img{
+	width: 550px;
+	position:relative;
+	margin: 0px 35%;
+}
 </style>	
 <script>
 "use strict";
@@ -133,7 +138,7 @@ function msgClose(id) {
 <body>
 	
 	<main>
-		
+		<img src="img/logo.jpg"></br>
 		<form id="sign-up" method="POST">
 		<fieldset>
 				<legend>Авторизация</legend>

@@ -42,7 +42,7 @@
 	function add_cust($type, $name, $adres, $phone) {
 		global $conn;
 		
-		$query = "INSERT INTO customer VALUES(NULL, '$type', '$name', '$adres', '$phone')";
+		$query = "INSERT INTO customer VALUES(NULL, '$type_cus', '$name_cus', '$adres', '$phone')";
 		mysqli_query($conn, $query, $db);
 	}
 	
@@ -103,21 +103,22 @@
 	//вывести список категорий товаров
 	function categori(){
 		global $conn;
-		$sql = "SELECT name FROM category";
- 
-		$result = mysqli_query($conn,$sql);
-		return $result;
+		$query = "SELECT name_c FROM category";
+		//var_dump($query);
+		$result_select = mysql_result($conn, $query);
+		var_dump($result_select);
+		//return $result;
 	}
 	
 	//добавление товара в таблицу товара 
 	function add_product($name, $category, $price, $img, $description, $availability) {
 		global $conn;
 		
-		$query = "INSERT INTO product VALUES(NULL, '$name', '$category', $price, '$img', '$description', $availability)";
+		$query = "INSERT INTO product VALUES(NULL, '$name_p', '$category', $price, '$img', '$description', $availability)";
 		mysqli_query($conn, $query, $db);
 	}
 	
-	//добавление товара в таблицу товара 
+	//добавление характеристик товара в таблицу  
 	function add_product_char($memory, $screen, $camera, $battery_capacity) {
 		global $conn;
 		
